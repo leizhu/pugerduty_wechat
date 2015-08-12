@@ -22,14 +22,14 @@ import java.util.*;
 /**
  * Created by pivotal on 8/6/15.
  */
-public class PugerDutyService {
-    private static final Logger logger = Logger.getLogger(PugerDutyService.class);
+public class PagerDutyService {
+    private static final Logger logger = Logger.getLogger(PagerDutyService.class);
 
     private static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'");
 
     HttpRestClient httpRestClient;
 
-    public PugerDutyService() {
+    public PagerDutyService() {
         Map<String,String> headerMap = new HashMap<String, String>();
         headerMap.put("Authorization","Token token=yAD3WLwgJYSp1wjV872b");
         headerMap.put("Content-type","application/json");

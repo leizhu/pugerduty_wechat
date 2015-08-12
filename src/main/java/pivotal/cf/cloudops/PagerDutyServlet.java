@@ -2,8 +2,7 @@ package pivotal.cf.cloudops;
 
 import org.apache.log4j.Logger;
 import pivotal.cf.cloudops.db.ConnectionManager;
-import pivotal.cf.cloudops.service.CoreService;
-import pivotal.cf.cloudops.service.PugerDutyService;
+import pivotal.cf.cloudops.service.PagerDutyService;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -18,7 +17,7 @@ import java.io.UnsupportedEncodingException;
 public class PagerDutyServlet extends HttpServlet {
     private static final Logger logger = Logger.getLogger(PagerDutyServlet.class);
 
-    PugerDutyService pagerdutyService = new PugerDutyService();
+    PagerDutyService pagerdutyService = new PagerDutyService();
 
     public void init() throws ServletException {
         logger.info("Init DB connection ...");

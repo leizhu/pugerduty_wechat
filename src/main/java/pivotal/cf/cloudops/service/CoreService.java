@@ -16,7 +16,7 @@ public class CoreService{
 
     public static Logger logger = Logger.getLogger(CoreService.class);
 
-    PugerDutyService pugerDutyService = new PugerDutyService();
+    PagerDutyService pagerDutyService = new PagerDutyService();
 
 
     public String processRequest(HttpServletRequest request) {
@@ -49,13 +49,13 @@ public class CoreService{
                     logger.info("MsgType: " + msgType);
 
                     String[] array = content.split(",");
-                    String result = pugerDutyService.getIncidents(array[1],array[2]);
+                    String result = pagerDutyService.getIncidents(array[1],array[2]);
                     textMessage.setContent(result);
                     respMessage = MessageUtil.textMessageToXml(textMessage);
                 }
                 else if (content.startsWith("get")) {
                     String[] array = content.split(",");
-                    NewsMessage newsMessage =  pugerDutyService.constructNewsMessage(fromUserName,toUserName,array[1],array[2]);
+                    NewsMessage newsMessage =  pagerDutyService.constructNewsMessage(fromUserName,toUserName,array[1],array[2]);
                     if (newsMessage.getArticleCount() > 0) {
                         respMessage = MessageUtil.newsMessageToXml(newsMessage);
                     }
