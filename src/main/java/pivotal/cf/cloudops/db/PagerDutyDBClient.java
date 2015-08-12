@@ -25,7 +25,7 @@ public class PagerDutyDBClient {
 
     private static final Logger logger = Logger.getLogger(PagerDutyDBClient.class);
 
-    private static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'");
+    private static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
 
     public static void saveIncident(Connection connection, JSONObject jsonObject) {
         try {
@@ -39,14 +39,20 @@ public class PagerDutyDBClient {
             String html_url = incidentObj.getString("html_url");
             String service_id = incidentObj.getJSONObject("service").getString("id");
             String escalation_policy_id = incidentObj.getJSONObject("escalation_policy").getString("id");
-            String assigned_to_user = incidentObj.getJSONObject("assigned_to_user").getString("name");
+
+            String owner = "";
+            if(incidentObj.isNull("assigned_to_user") == false)
+                owner = incidentObj.getJSONObject("assigned_to_user").getString("name");
+            else if(incidentObj.isNull("resolved_by_user") == false)
+                owner = incidentObj.getJSONObject("resolved_by_user").getString("name");
+
             String trigger_data_subject = incidentObj.getJSONObject("trigger_summary_data").getString("subject");
 
             // save to mysql db
             if(isIncidentExist(connection,incident_id))
-                updateIncident(connection,incident_id,type,created_on,html_url,service_id,escalation_policy_id,assigned_to_user,trigger_data_subject);
+                updateIncident(connection,incident_id,type,created_on,html_url,service_id,escalation_policy_id,owner,trigger_data_subject);
             else
-                insertIncident(connection,incident_id,type,created_on,html_url,service_id,escalation_policy_id,assigned_to_user,trigger_data_subject);
+                insertIncident(connection,incident_id,type,created_on,html_url,service_id,escalation_policy_id,owner,trigger_data_subject);
 
             logger.info("Incident[" + incident_id + "] was saved to db successfully.");
         } catch (JSONException e) {
@@ -54,11 +60,13 @@ public class PagerDutyDBClient {
         }
     }
 
-    private static void insertIncident(Connection dbConnection, String incident_id, String type, String created_on, String html_url, String service_id, String escalation_policy_id, String assigned_to_user, String trigger_data_subject) {
+    private static void insertIncident(Connection dbConnection, String incident_id, String type, String created_on, String html_url, String service_id, String escalation_policy_id, String owner, String trigger_data_subject) {
+        logger.info("Incident not exsits, so insert it");
+
         PreparedStatement preparedStatement = null;
 
         String insertTableSQL = "INSERT INTO incidents"
-                + "(incident_id, type, html_url, service_id, escalation_policy_id, assigned_to_user, trigger_data_subject, created_on) VALUES"
+                + "(incident_id, type, html_url, service_id, escalation_policy_id, owner, trigger_data_subject, created_on) VALUES"
                 + "(?,?,?,?,?,?,?,?)";
 
         try {
@@ -69,7 +77,7 @@ public class PagerDutyDBClient {
             preparedStatement.setString(3, html_url);
             preparedStatement.setString(4, service_id);
             preparedStatement.setString(5, escalation_policy_id);
-            preparedStatement.setString(6, assigned_to_user);
+            preparedStatement.setString(6, owner);
             preparedStatement.setString(7, trigger_data_subject);
 
             Date date = dateFormat.parse(created_on);
@@ -96,10 +104,12 @@ public class PagerDutyDBClient {
         }
     }
 
-    private static void updateIncident(Connection dbConnection, String incident_id, String type, String created_on, String html_url, String service_id, String escalation_policy_id, String assigned_to_user, String trigger_data_subject) {
+    private static void updateIncident(Connection dbConnection, String incident_id, String type, String created_on, String html_url, String service_id, String escalation_policy_id, String owner, String trigger_data_subject) {
+        logger.info("Incident exsits, so update it");
+
         PreparedStatement preparedStatement = null;
 
-        String updateTableSQL = "UPDATE incidents SET type = ?,html_url = ?,service_id = ?,escalation_policy_id = ?,assigned_to_user = ?,trigger_data_subject = ?,created_on = ?"
+        String updateTableSQL = "UPDATE incidents SET type = ?,html_url = ?,service_id = ?,escalation_policy_id = ?,owner = ?,trigger_data_subject = ?,created_on = ?"
                 + " WHERE incident_id = ?";
 
         try {
@@ -108,7 +118,7 @@ public class PagerDutyDBClient {
             preparedStatement.setString(2, html_url);
             preparedStatement.setString(3, service_id);
             preparedStatement.setString(4, escalation_policy_id);
-            preparedStatement.setString(5, assigned_to_user);
+            preparedStatement.setString(5, owner);
             preparedStatement.setString(6, trigger_data_subject);
 
             Date date = dateFormat.parse(created_on);

@@ -54,7 +54,10 @@ public class CoreService{
                     respMessage = MessageUtil.textMessageToXml(textMessage);
                 }
                 else {
-                    textMessage.setContent("无效的输入, 请按照提示输入:\n例如返回最近3天的未处理的incidents，请输入'get,open,3'");
+                    textMessage.setContent("无效的输入, 请按照提示输入:\n例如返回最近1天的未处理的incidents，请输入'get,open,1';\n" +
+                            "返回最近2天的所有的incidents，请输入'get,all,2';\n" +
+                            "返回最近3天的被acknowledged的incidents，请输入'get,ack,3';\n" +
+                            "返回最近4天的被resolved的incidents，请输入'get,resolved,4';\n");
                     respMessage = MessageUtil.textMessageToXml(textMessage);
                 }
             } else if (msgType.equals(ConstantWeChat.REQ_MESSAGE_TYPE_EVENT)) {

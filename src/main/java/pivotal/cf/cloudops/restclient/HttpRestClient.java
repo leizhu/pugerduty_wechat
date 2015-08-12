@@ -3,8 +3,6 @@ package pivotal.cf.cloudops.restclient;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 import org.apache.http.HttpEntity;

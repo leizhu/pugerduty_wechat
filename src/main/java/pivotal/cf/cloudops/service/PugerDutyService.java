@@ -37,7 +37,7 @@ public class PugerDutyService {
     public String getIncidents(String status, String lastDays) {
         String url = "https://pivotalwechat.pagerduty.com/api/v1/incidents?fields=incident_number,status,html_url";
         if(status.equalsIgnoreCase("open"))
-            url += "&status=triggered";
+            url += "&status=triggered,acknowledged";
         else if(status.equalsIgnoreCase("resolved"))
             url += "&status=resolved";
         else if(status.equalsIgnoreCase("ack"))

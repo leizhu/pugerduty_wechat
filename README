@@ -46,7 +46,7 @@ CREATE TABLE `incidents` (
   `html_url` varchar(100) DEFAULT NULL,
   `service_id` varchar(12) NOT NULL,
   `escalation_policy_id` varchar(12) NOT NULL,
-  `assigned_to_user` varchar(20) DEFAULT NULL,
+  `owner` varchar(20) DEFAULT NULL,
   `created_on` datetime NOT NULL,
   `trigger_data_subject` varchar(100) NOT NULL,
   `trigger_data_detail` varchar(100) DEFAULT NULL,
