@@ -1,0 +1,55 @@
+# build war
+export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.7.0_51.jdk/Contents/Home/
+mvn clean install
+
+# push war to CF
+cf push wechat -p target/pivotal_wechat-1.0-SNAPSHOT.war
+
+# wechat config
+## wechat server url
+http://wechat.birdnest.cf-app.com/wechatCore
+## setting
+wechat token: hackday
+
+# mysql service config
+```
+{
+ "VCAP_SERVICES": {
+  "p-mysql": [
+   {
+    "credentials": {
+     "hostname": "10.10.32.14",
+     "jdbcUrl": "jdbc:mysql://10.10.32.14:3306/cf_391b94ca_3120_4707_9f91_586927d54298?user=f9PA8WVZ8YGGpVuB\u0026password=5fnDXdSOLXmmmXpv",
+     "name": "cf_391b94ca_3120_4707_9f91_586927d54298",
+     "password": "5fnDXdSOLXmmmXpv",
+     "port": 3306,
+     "uri": "mysql://f9PA8WVZ8YGGpVuB:5fnDXdSOLXmmmXpv@10.10.32.14:3306/cf_391b94ca_3120_4707_9f91_586927d54298?reconnect=true",
+     "username": "f9PA8WVZ8YGGpVuB"
+    },
+    "label": "p-mysql",
+    "name": "mysql",
+    "plan": "100mb",
+    "tags": [
+     "mysql"
+    ]
+   }
+  ]
+ }
+}
+```
+
+# tables in mysql db
+```
+CREATE TABLE `incidents` (
+  `incident_id` varchar(12) NOT NULL,
+  `type` varchar(20) NOT NULL,
+  `html_url` varchar(100) DEFAULT NULL,
+  `service_id` varchar(12) NOT NULL,
+  `escalation_policy_id` varchar(12) NOT NULL,
+  `assigned_to_user` varchar(20) DEFAULT NULL,
+  `created_on` datetime NOT NULL,
+  `trigger_data_subject` varchar(100) NOT NULL,
+  `trigger_data_detail` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`incident_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+```

@@ -1,0 +1,36 @@
+{
+    "button":[
+        {
+            "name":"Incidents",
+            "sub_button":[
+                {
+                    "type":"click",
+                    "name":"Open",
+                    "url":"V1001_OPEN"
+                },
+                {
+                    "type":"click",
+                    "name":"Resolved",
+                    "url":"V1001_RESOLVED"
+                }]
+        },
+        {
+            "name":"Reports",
+            "sub_button":[
+                {
+                    "type":"click",
+                    "name":"Alerts",
+                    "url":"V1002_ALERT"
+                },
+                {
+                    "type":"click",
+                    "name":"Incidents",
+                    "url":"V1002_INCIDENT"
+                }]
+        },
+        {
+            "type":"click",
+            "name":"Escalation",
+            "key":"V1003_Escalation_Policy"
+        }]
+}
